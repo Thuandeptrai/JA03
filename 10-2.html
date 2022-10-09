@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+      integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+  <body>
+    <input id="username" />
+    <h1 id="usernameCheck" style="color: red">Please fill the username</h1>
+    <input id="password" />
+    <h1 id="passwordCheck" style="color: red">Please fill the password</h1>
+
+    <button id="btn-signup">SignUp</button>
+    <h1 id="signUpCheck" style="color: red">Your email is already picked</h1>
+
+  </body>
+  <script>
+
+    
+        var isvalid = false
+        var userNameValid = false
+        var passwordValid = false
+                  $("#signUpCheck").hide()
+        $("#usernameCheck").hide()
+        $("#passwordCheck").hide()
+        $("#btn-signup").prop("disabled",true)
+        $("#username").keyup(() =>
+        {
+        if($("#username").val().length < 3){
+            $("#usernameCheck").show()
+            userNameValid = false
+
+        }else{
+            $("#usernameCheck").hide()
+            userNameValid = true
+        }
+        if(userNameValid == true && passwordValid == true){
+                $("#btn-signup").prop("disabled",false)
+
+            }else{
+            $("#btn-signup").prop("disabled",true)
+
+            }
+
+    })
+    
+    $("#password").keyup(() =>
+        {
+        if($("#password").val().length < 3){
+            $("#passwordCheck").show()
+            passwordValid = false
+
+            
+        }else{
+            $("#passwordCheck").hide()
+            passwordValid = true
+            
+        }
+        if(userNameValid == true && passwordValid == true){
+            $("#btn-signup").prop("disabled",false)
+            
+        }else{
+            $("#btn-signup").prop("disabled",true)
+
+        }
+    })
+    
+    $("#btn-signup").click(() =>
+    {
+        var b = []
+        var username = $("#username").val()
+        var password = $("#password").val()
+        if(localStorage.getItem("users") != null)
+        {
+            b = JSON.parse(localStorage.getItem("users"))
+            for(i= 0; i < b.length; i++ ){
+                if(b[i].username == username){
+                  $("#signUpCheck").show()
+                    return
+                }
+            }
+        }
+        
+        b.push({
+            username: username,
+            password:password
+        })
+        
+        window.localStorage.setItem("users",JSON.stringify(b))
+        window.location.replace("http://127.0.0.1:5500/")   
+        
+    })
+
+    </script>
+</html>

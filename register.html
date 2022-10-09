@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+      integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+  </head>
+  <body>
+    <input id="username" />
+    <h5 id="usercheck" style="color: red;">
+      **Username is missing
+  </h5>
+    <input id="password" />
+    
+    <h5 id="passwordCheck" style="color: red;">
+      **password is missing
+  </h5>
+    <button id="target">Click here</button>
+  </body>
+  <script>
+    var username = false
+    var password = false
+    $(document).ready(function () {
+      $("#target").prop('disabled', true);
+      $("#usercheck").hide();
+      $("#passwordCheck").hide();
+
+      $('#username').keyup(() =>
+      {
+        validateUserNameAndPassword()
+        CheckIsValidToInput()
+      }) 
+      
+      $('#password').keyup(() =>
+      {
+        validatePassword()
+        CheckIsValidToInput()
+      }) 
+      HandlerUser()
+    });
+    function HandlerUser(){
+        var getUser = JSON.parse(localStorage.getItem("user"))
+        console.log(getUser)
+        if(getUser.username.length !== 0 )
+        {
+            window.location.replace("http://127.0.0.1:5500/index.html");
+
+
+            
+
+        }
+    }
+    function CheckIsValidToInput()
+    {
+      if(username == true && password == true)
+      {
+      $("#target").prop('disabled', false);
+
+      }
+    }
+    function validateUserNameAndPassword(){
+      $("#target").prop('disabled', true);
+
+      let usernameValue = $("#username").val();
+      console.log(usernameValue)
+    if (usernameValue.length == "" ) {
+      $("#usercheck").show();
+      usernameError = false;
+      return false;
+    } else if (usernameValue.length < 3 || usernameValue.length > 10 ) {
+      $("#usercheck").show();
+      $("#usercheck").html("**length of username must be between 3 and 10");
+      $("#target").prop('disabled', true);
+      usernameError = false;
+      return false;
+    } else {
+      $("#usercheck").hide();
+      username = true
+    }
+    }
+    function  validatePassword(){
+      $("#target").prop('disabled', true);
+
+      let passwordValue = $("#password").val();
+      console.log(passwordValue)
+      console.log(passwordValue)
+    if (passwordValue.length == "" || passwordValue.length=="" ) {
+      $("#passwordCheck").show();
+      usernameError = false;
+      return false;
+    } else if (passwordValue.length < 3 || passwordValue.length > 10) {
+      $("#passwordCheck").show();
+      $("#passwordCheck").html("**length of password must be between 3 and 10");
+      $("#target").prop('disabled', true);
+      usernameError = false;
+      return false;
+    } else {
+      $("#passwordCheck").hide();
+      password = true
+    }
+    }
+
+    $("#target").click(function () {
+      var b = [];
+      var username = $("#username").val();
+      var password = $("#password").val();
+      if (localStorage.getItem("users") !== null) {
+        b = JSON.parse(localStorage.getItem("users"));
+        for(i = 0; i < b.length ; i++){
+          if(b[i].name === username)
+          {
+            $("#passwordCheck").html("User name is already picked")
+            $("#passwordCheck").show()
+            return false
+          }
+        }
+      }
+      console.log(b);
+      const obj = { name: username, age: 30, password: password };
+      b.push(obj);
+      const myJSON = JSON.stringify(b);
+      localStorage.setItem("users", myJSON);
+    });
+  </script>
+</html>
